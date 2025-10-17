@@ -37,8 +37,13 @@ class RTSPWebRTCClient {
                 return;
             }
 
+            // Get WebSocket URL using current hostname
+            const wsHost = window.location.hostname;
+            const wsUrl = `ws://${wsHost}:9999`;
+            console.log(`Connecting to: ${wsUrl}`);
+
             // Initialize JSMpeg player
-            this.player = new JSMpeg.Player('ws://localhost:9999', {
+            this.player = new JSMpeg.Player(wsUrl, {
                 canvas: this.canvas,
                 autoplay: true,
                 audio: true,

@@ -5,7 +5,10 @@ export class SignalingServer {
   private clients: Set<WebSocket> = new Set();
 
   constructor(port: number) {
-    this.wss = new WebSocket.Server({ port });
+    this.wss = new WebSocket.Server({
+      port,
+      host: '0.0.0.0'  // Listen on all interfaces
+    });
     this.setupServer();
   }
 
@@ -37,7 +40,7 @@ export class SignalingServer {
       });
     });
 
-    console.log(`WebSocket signaling server started on port ${this.wss.options.port}`);
+    console.log(`WebSocket signaling server started on 0.0.0.0:${this.wss.options.port}`);
   }
 
   private broadcast(message: string, sender: WebSocket) {

@@ -239,6 +239,19 @@ environment:
   - NODE_ENV=production
 ```
 
+## Remote Access
+
+The server binds to **0.0.0.0** (all network interfaces) and can be accessed from other devices:
+
+- **Local network**: `http://<server-ip>:3000`
+- **Auto-detection**: Client automatically connects to the correct WebSocket URL based on how you access the page
+
+See [REMOTE-ACCESS.md](REMOTE-ACCESS.md) for detailed instructions on:
+- Accessing from other devices on your network
+- Configuring firewalls
+- Setting up internet access (port forwarding, VPN, reverse proxy)
+- Security recommendations
+
 ## Notes
 
 - The implementation uses FFmpeg directly via Node.js child processes
@@ -246,6 +259,7 @@ environment:
 - WebRTC peer connections may require TURN servers for NAT traversal
 - The stream port (9999) is used for the FFmpeg WebSocket output
 - Docker image is optimized for Ubuntu 20.04 ARM64 architecture
+- Server binds to 0.0.0.0 for network accessibility
 
 ## License
 

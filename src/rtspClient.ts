@@ -15,7 +15,10 @@ export class RTSPClient {
   start() {
     try {
       // Create WebSocket server for streaming
-      this.wsServer = new WebSocket.Server({ port: this.wsPort });
+      this.wsServer = new WebSocket.Server({
+        port: this.wsPort,
+        host: '0.0.0.0'  // Listen on all interfaces
+      });
 
       this.wsServer.on('connection', (socket: WebSocket) => {
         console.log('Stream client connected');
@@ -30,7 +33,7 @@ export class RTSPClient {
       // Start FFmpeg process to convert RTSP to MPEG1
       this.startFFmpeg();
 
-      console.log(`RTSP stream WebSocket server started on port ${this.wsPort}`);
+      console.log(`RTSP stream WebSocket server started on 0.0.0.0:${this.wsPort}`);
       console.log(`Streaming from: ${config.rtsp.url}`);
     } catch (error) {
       console.error('Error starting RTSP stream:', error);

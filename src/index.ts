@@ -16,9 +16,10 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', message: 'Server is running' });
 });
 
-// Start the HTTP server
-const httpServer = app.listen(PORT, () => {
-  console.log(`HTTP server running on http://localhost:${PORT}`);
+// Start the HTTP server on all interfaces (0.0.0.0)
+const httpServer = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`HTTP server running on http://0.0.0.0:${PORT}`);
+  console.log(`Access from other devices: http://<your-server-ip>:${PORT}`);
 });
 
 // Start the RTSP client (converts RTSP to WebSocket stream)
