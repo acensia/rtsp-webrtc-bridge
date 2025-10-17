@@ -1,7 +1,7 @@
 # Multi-stage build for RTSP to WebRTC streaming server
 # Optimized for Ubuntu 20.04 ARM64
 
-FROM arm64v8/node:20-bullseye-slim AS builder
+FROM node:20-bullseye-slim AS builder
 
 # Install build dependencies
 RUN apt-get update && apt-get install -y \

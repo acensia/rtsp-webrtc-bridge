@@ -5,7 +5,7 @@ echo "Building RTSP to WebRTC Streamer Docker Image for ARM64..."
 echo "============================================================"
 
 # Build the image
-docker build -t rtsp-webrtc-streamer:latest .
+docker build -t rtsp-webrtc-streamer:0.1.1 --platform linux/arm64 .
 
 echo ""
 echo "Build complete!"
