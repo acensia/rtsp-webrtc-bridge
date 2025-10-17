@@ -2,6 +2,7 @@ import express from 'express';
 import path from 'path';
 import { RTSPClient } from './rtspClient';
 import { SignalingServer } from './signalingServer';
+import { VideoConverter } from './videoConverter';
 import config from '../config.json';
 
 const app = express();
@@ -22,7 +23,7 @@ const httpServer = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Access from other devices: http://<your-server-ip>:${PORT}`);
 });
 
-// Start the RTSP client (converts RTSP to WebSocket stream)
+// Start the RTSP client (converts RTSP to WebSocket stream for JSMpeg - kept for backward compatibility)
 const rtspClient = new RTSPClient(9999);
 try {
   rtspClient.start();
@@ -35,6 +36,30 @@ try {
 // Start the WebRTC signaling server
 const signalingServer = new SignalingServer(WS_PORT);
 
+// Start the video converter for WebRTC
+const videoConverter = new VideoConverter(1280, 720);
+
+// Connect video converter to WebRTC peer when frames are available
+videoConverter.on('frame', (frame) => {
+  const peer = signalingServer.getWebRTCPeer();
+  if (peer && peer.isReady()) {
+    peer.sendVideoFrame(frame);
+  }
+});
+
+videoConverter.on('error', (error) => {
+  console.error('Video converter error:', error);
+});
+
+// Start the video converter
+try {
+  videoConverter.start();
+  console.log('Video converter started for WebRTC');
+} catch (error) {
+  console.error('Failed to start video converter:', error);
+  console.log('WebRTC video streaming may not work properly');
+}
+
 // Graceful shutdown
 const shutdown = () => {
   console.log('\nShutting down gracefully...');
@@ -46,6 +71,9 @@ const shutdown = () => {
 
   // Stop RTSP client
   rtspClient.stop();
+
+  // Stop video converter
+  videoConverter.stop();
 
   // Stop signaling server
   signalingServer.stop();
