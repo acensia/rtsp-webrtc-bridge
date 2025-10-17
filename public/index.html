@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTSP to WebRTC Stream</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        #videoContainer {
+            position: relative;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .status {
+            padding: 10px;
+            background: #333;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .status.connected {
+            background: #1b5e20;
+        }
+
+        .status.error {
+            background: #b71c1c;
+        }
+
+        .info {
+            background: #2d2d2d;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+
+        .info h3 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .info p {
+            margin: 5px 0;
+            color: #aaa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RTSP to WebRTC Stream Viewer</h1>
+
+        <div id="status" class="status">Status: Disconnected</div>
+
+        <div class="controls">
+            <button id="startBtn">Start Stream</button>
+            <button id="stopBtn" disabled>Stop Stream</button>
+        </div>
+
+        <div id="videoContainer">
+            <canvas id="videoCanvas"></canvas>
+        </div>
+
+        <div class="info">
+            <h3>Information</h3>
+            <p>This viewer receives RTSP stream converted to WebRTC format.</p>
+            <p>Make sure your RTSP URL is configured in config.json</p>
+            <p id="wsStatus">WebSocket: Disconnected</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsmpeg@0.2.0/jsmpeg.min.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>

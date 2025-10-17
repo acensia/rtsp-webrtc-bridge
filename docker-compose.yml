@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  rtsp-webrtc-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: rtsp-webrtc-streamer:latest
+    container_name: rtsp-webrtc-server
+    restart: unless-stopped
+    ports:
+      - "3000:3000"   # HTTP server
+      - "8080:8080"   # WebRTC signaling WebSocket
+      - "9999:9999"   # RTSP stream WebSocket
+    volumes:
+      # Mount config file to allow runtime configuration
+      - ./config.json:/app/config.json:ro
+    environment:
+      - NODE_ENV=production
+    networks:
+      - rtsp-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  rtsp-network:
+    driver: bridge

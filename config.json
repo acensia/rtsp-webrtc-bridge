@@ -1,0 +1,18 @@
+{
+  "rtsp": {
+    "url": "rtsp://your-camera-ip:554/stream",
+    "username": "",
+    "password": ""
+  },
+  "server": {
+    "port": 3000,
+    "wsPort": 8080
+  },
+  "webrtc": {
+    "iceServers": [
+      {
+        "urls": "stun:stun.l.google.com:19302"
+      }
+    ]
+  }
+}
