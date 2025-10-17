@@ -3,7 +3,7 @@ import {
   RTCSessionDescription,
   RTCIceCandidate,
   nonstandard
-} from '@roamhq/wrtc';
+} from '@roamhq/wrtc-linux-arm64';
 import config from '../config.json';
 import { EventEmitter } from 'events';
 
