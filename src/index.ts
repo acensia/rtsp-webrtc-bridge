@@ -17,28 +17,43 @@ app.get('/health', (req, res) => {
 });
 
 // Start the HTTP server
-app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
   console.log(`HTTP server running on http://localhost:${PORT}`);
 });
 
 // Start the RTSP client (converts RTSP to WebSocket stream)
 const rtspClient = new RTSPClient(9999);
-rtspClient.start();
+try {
+  rtspClient.start();
+} catch (error) {
+  console.error('Failed to start RTSP client:', error);
+  console.log('The server will continue running, but RTSP streaming is unavailable.');
+  console.log('Please check your RTSP URL in config.json');
+}
 
 // Start the WebRTC signaling server
 const signalingServer = new SignalingServer(WS_PORT);
 
 // Graceful shutdown
-process.on('SIGINT', () => {
+const shutdown = () => {
   console.log('\nShutting down gracefully...');
-  rtspClient.stop();
-  signalingServer.stop();
-  process.exit(0);
-});
 
-process.on('SIGTERM', () => {
-  console.log('\nShutting down gracefully...');
+  // Close HTTP server
+  httpServer.close(() => {
+    console.log('HTTP server closed');
+  });
+
+  // Stop RTSP client
   rtspClient.stop();
+
+  // Stop signaling server
   signalingServer.stop();
-  process.exit(0);
-});
+
+  // Give services time to close
+  setTimeout(() => {
+    process.exit(0);
+  }, 1000);
+};
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);

@@ -1,6 +1,6 @@
 {
   "rtsp": {
-    "url": "rtsp://your-camera-ip:554/stream",
+    "url": "rtsp://192.168.1.120:554/test",
     "username": "",
     "password": ""
   },

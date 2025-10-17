@@ -29,12 +29,15 @@ logs/
 
 # Documentation
 README.md
-*.md
+DEPLOYMENT.md
 
 # Docker
 Dockerfile
 .dockerignore
 docker-compose.yml
+
+# Scripts (not needed in container)
+*.sh
 
 # Testing
 coverage/

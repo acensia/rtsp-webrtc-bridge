@@ -16,15 +16,18 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 
-# Install dependencies
-RUN npm ci --only=production && \
-    npm install -g typescript
+# Install all dependencies (including devDependencies for building)
+RUN npm ci
 
-# Copy source code
+# Copy source code and config (needed for TypeScript compilation)
 COPY src ./src
+COPY config.json ./
 
 # Build TypeScript
 RUN npm run build
+
+# Remove devDependencies after build
+RUN npm prune --production
 
 # Production stage
 FROM arm64v8/node:20-bullseye-slim
